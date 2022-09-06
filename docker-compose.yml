@@ -1,0 +1,96 @@
+version: '3'
+services:
+  php-fpm:
+    # image: php:7.4.30-apache
+    build: ./Docker/php74
+    volumes: 
+      - ./php:/var/www/html
+    restart: always  
+    networks:
+      - "backend"
+
+  # apache2:
+  #   image: httpd:2.4.54-alpine
+  #   volumes: 
+  #     - ./php:/usr/local/apache2/htdocs
+  #     - ./apache/htdocs/httpd.conf:/usr/local/apache2/conf/httpd.conf
+  #     - ./apache/htdocs/extra/httpd-vhosts.conf:/usr/local/apache2/conf/extra/httpd-vhosts.conf
+  #   ports:
+  #     - "81:80"  
+  #   networks:
+  #     - "backend"
+
+  nginx:
+    image: nginx:1.22
+    volumes: 
+      - ./php:/var/www/html
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    restart: always
+    ports:
+      - "80:80"
+    networks:
+      - "backend"
+
+  # nodejs:
+  #   image: node:lts
+  #   # build: ./Docker/node/
+  #   volumes: 
+  #     - ./php:/var/www/html
+  #   restart: always  
+  #   tty: true 
+  #   working_dir: /var/www/html
+  #   networks:
+  #     - "backend"
+
+  # apache:
+  #   image: httpd:alpine3.16
+  #   volumes: 
+  #     - ./php:/var/www/html
+  #     - ./nginx/conf.d:/etc/nginx/conf.d
+  #   restart: always
+  #   ports:
+  #     - "80:80"
+  #   networks:
+  #     - "backend" 
+
+  mysql:
+    image: mysql:8.0
+    volumes:
+      - ./db/mysql:/var/lib/mysql
+      # - ./config/db_seed/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      # MYSQL_USER: root
+      # MYSQL_PASSWORD: root
+    ports:
+      - "3306:3306"
+    networks:
+      - "backend"
+
+  # postgres:
+  #   image: "postgres"
+  #   volumes:
+  #      - ./db/pgsql:/data/postgres
+  #      #psql -d databasename -U postgres < data_base_dump
+  #   restart: "always"
+  #   environment:
+  #     POSTGRES_PASSWORD: "123456"
+  #     # DEBUG: "false"
+  #     PGDATA: /data/postgres
+  #   ports:
+  #     - "5432:5432"
+  #   networks:
+  #     - "backend"
+
+  # redis:
+  #   image: "redis"
+  #   restart: always
+  #   ports:
+  #     - "6379:6379"
+  #   networks:
+  #     - "backend"
+
+networks:
+  backend:
+    
