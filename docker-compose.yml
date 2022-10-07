@@ -42,7 +42,7 @@ services:
 
 ### ZooKeeper #########################################
   zookeeper:
-    build: ./zookeeper
+    build: ./Docker/zookeeper
     volumes:
       - ./zookeeper/data:/data
       - ./zookeeper/datalog:/datalog
