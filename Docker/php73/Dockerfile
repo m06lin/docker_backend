@@ -4,5 +4,6 @@ ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/do
 
 RUN chmod +x /usr/local/bin/install-php-extensions
 RUN install-php-extensions mysqli pdo pdo_mysql gd zip && docker-php-ext-enable pdo_mysql
+RUN pecl install mysql_xdevapi
 
 EXPOSE 80

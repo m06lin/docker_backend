@@ -2,6 +2,13 @@ server {
     listen         80;
     server_name    www.{xxxxx}.local {xxxxx}.127.0.0.1.nip.io;
 
+    # For https
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    # ssl key replace by yourself
+    ssl_certificate     /etc/nginx/ssl/_wildcard.127.0.0.1.nip.io.pem;
+    ssl_certificate_key /etc/nginx/ssl/_wildcard.127.0.0.1.nip.io-key.pem;
+
     set $projectName "{xxxxx}";
     root           /var/www/html/$projectName/public;
     index          index.php;
