@@ -47,6 +47,11 @@ https://www.lzskyline.com/index.php/archives/157/
 docker-compose exec nginx nginx -t
 docker-compose exec nginx nginx -s reload 
 ```
+### 快速生成 conf 檔案
+```
+cd nginx
+./add_host.sh <folderName> 
+```
 
 ## 開發規範 
 ### psr-12
