@@ -1,0 +1,121 @@
+version: '3'
+services:
+  php-fpm:
+    # image: php:7.4.30-apache
+    build: ./Docker/php74
+    volumes: 
+      - ./php:/var/www/html
+    restart: always  
+    networks:
+      - "backend"
+
+  php8-fpm:
+    # image: php:7.4.30-apache
+    build: ./Docker/php80
+    volumes: 
+      - ./php:/var/www/html
+    restart: always  
+    networks:
+      - "backend"
+
+  nginx:
+    # image: nginx:1.22
+    build:
+      context: ./nginx
+      args:
+          - CHANGE_SOURCE=false
+          - PHP_UPSTREAM_CONTAINER=php-fpm
+          - PHP_UPSTREAM_PORT=9000
+          - http_proxy
+          - https_proxy
+          - no_proxy
+    volumes: 
+      - ./php:/var/www/html
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/ssl:/etc/nginx/ssl
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - "backend"
+
+### ZooKeeper #########################################
+  zookeeper:
+    build: ./Docker/zookeeper
+    volumes:
+      - ./zookeeper/data:/data
+      - ./zookeeper/datalog:/datalog
+    ports:
+      - "2181:2181"
+    networks:
+      - backend
+
+### kafka ####################################################
+  kafka:
+    image: wurstmeister/kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://127.0.0.1:9092
+      KAFKA_MESSAGE_MAX_BYTES: 2000000
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    volumes:
+      - ./kafka:/kafka
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - backend
+
+### kafka-manager ###########################################
+  kafka-manager:
+    image: sheepkiller/kafka-manager
+    ports:
+      - 9020:9000
+    environment:
+      ZK_HOSTS: zookeeper:2181
+    networks:
+      - backend
+
+
+  # nodejs:
+  #   image: node:lts
+  #   # build: ./Docker/node/
+  #   volumes: 
+  #     - ./php:/var/www/html
+  #   restart: always  
+  #   tty: true 
+  #   working_dir: /var/www/html
+  #   networks:
+  #     - "backend"
+
+  # apache:
+  #   image: httpd:alpine3.16
+  #   volumes: 
+  #     - ./php:/var/www/html
+  #     - ./nginx/conf.d:/etc/nginx/conf.d
+  #   restart: always
+  #   ports:
+  #     - "80:80"
+  #   networks:
+  #     - "backend" 
+
+  mysql:
+    image: mysql:8.0
+    volumes:
+      - ./db/mysql:/var/lib/mysql
+      # - ./config/db_seed/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      # MYSQL_USER: root
+      # MYSQL_PASSWORD: root
+    ports:
+      - "3306:3306"
+    networks:
+      - "backend"
+
+networks:
+  backend:
+    
