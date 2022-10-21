@@ -9,7 +9,7 @@ RUN apk update \
     && apk add --no-cache bash
 
 RUN chmod +x /usr/local/bin/install-php-extensions
-RUN install-php-extensions mysqli pdo pdo_mysql gd zip sockets && docker-php-ext-enable pdo_mysql gd sockets
+RUN install-php-extensions mysqli pdo pdo_mysql gd zip sockets imagick && docker-php-ext-enable pdo_mysql gd sockets imagick
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 EXPOSE 80

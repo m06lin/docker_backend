@@ -1,3 +1,4 @@
 *
 !.gitignore
 !laravel.example
+!node.conf.example
