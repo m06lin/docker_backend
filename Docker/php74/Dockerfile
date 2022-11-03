@@ -6,7 +6,8 @@ RUN apk update \
     && apk upgrade \
     && apk --update add logrotate \
     && apk add --no-cache openssl \
-    && apk add --no-cache bash
+    && apk add --no-cache bash \
+    && apk add --no-cache git
 
 RUN chmod +x /usr/local/bin/install-php-extensions
 RUN install-php-extensions mysqli pdo pdo_mysql gd zip sockets imagick && docker-php-ext-enable pdo_mysql gd sockets imagick
