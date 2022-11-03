@@ -38,20 +38,20 @@ services:
     networks:
       - "backend"
 
-  nodejs:
-    image: node:lts
-    # build: ./Docker/node/
-    volumes: 
-      - ./php:/var/www/html
-    restart: always  
-    tty: true 
-    expose:
-      - "3000"
-      - "8080"
-      - "9487"
-    working_dir: /var/www/html
-    networks:
-      - "backend"
+  # nodejs:
+  #   image: node:lts
+  #   # build: ./Docker/node/
+  #   volumes: 
+  #     - ./php:/var/www/html
+  #   restart: always  
+  #   tty: true 
+  #   expose:
+  #     - "3000"
+  #     - "8080"
+  #     - "9487"
+  #   working_dir: /var/www/html
+  #   networks:
+  #     - "backend"
 
   # apache:
   #   image: httpd:alpine3.16
