@@ -16,6 +16,14 @@ services:
     networks:
       - "backend"
 
+  php81-fpm:
+    build: ./Docker/php81
+    volumes: 
+      - ./php:/var/www/html
+    restart: always  
+    networks:
+      - "backend"
+
   nginx:
     # image: nginx:1.22
     build:
@@ -81,4 +89,4 @@ services:
 
 networks:
   backend:
-    name: "backend"
+    # name: "backend"
