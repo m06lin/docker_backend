@@ -1,5 +1,13 @@
 
 ## ENV  
+
+### 更新日誌
+| 日期        | 項目                                | 狀態    |
+|------------|-------------------------------------| ------ |
+| 2022-11-11 | 更新 nginx config 通用版本            | 開發完成 |
+
+
+### 安裝流程
 啟動 docker (包含 php-fpm nginx mysql)
 ```sh
 docker-composer up -d 
@@ -40,12 +48,18 @@ mkcert 是快速的 localhost 憑證建立服務
 ```sh
 brew install mkcert
 mkcert "*.127.0.0.1.nip.io"
+mkcert "*.php8.127.0.0.1.nip.io"
+mkcert "*.php81.127.0.0.1.nip.io"
 mkcert -install
 ```
-執行結束後會有兩個憑證請放入 ./nginx/ssl
+執行結束後會有六個憑證請放入 ./nginx/ssl
 ```
 _wildcard.127.0.0.1.nip.io-key.pem
 _wildcard.127.0.0.1.nip.io.pem
+_wildcard.php8.127.0.0.1.nip.io-key.pem
+_wildcard.php8.127.0.0.1.nip.io.pem
+_wildcard.php81.127.0.0.1.nip.io-key.pem
+_wildcard.php81.127.0.0.1.nip.io.pem
 ```
 
 重啟瀏覽器 (chrome 可於網址列填入下方連結)
@@ -70,10 +84,11 @@ https://www.lzskyline.com/index.php/archives/157/
 docker-compose exec nginx nginx -t
 docker-compose exec nginx nginx -s reload 
 ```
-### 快速生成 conf 檔案  
-`./add_host.sh <folderName> <containerName>` 
-- folderName  資料夾名稱  
-- containerName proxy_pass 容器名稱, 預設 php-fpm (php7.4)  
+
+### ~~快速生成 conf 檔案~~
+~~`./add_host.sh <folderName> <containerName>`~~ 現版本直接對應好資料夾 & url
+- folderName  資料夾名稱
+- containerName proxy_pass 容器名稱, 預設 php-fpm (php7.4)
 
 預設的 server_name 會是 {folderName}.127.0.0.1.nip.io  
 如果需要調整再自行處理   
