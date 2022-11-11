@@ -2,3 +2,6 @@
 !.gitignore
 !laravel.example
 !node.conf.example
+!default.conf
+!php8.conf
+!php81.conf
