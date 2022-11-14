@@ -1,16 +1,21 @@
 
-## ENV  
+# ENV  
 
-### 更新日誌
+## 更新日誌
 | 日期        | 項目                                | 狀態    |
 |------------|-------------------------------------| ------ |
 | 2022-11-11 | 更新 nginx config 通用版本            | 開發完成 |
+| 2022-11-14 | 新增 dnsmasq                        | 開發完成 |
 
 
-### 安裝流程
+## 快速安裝
+`./quick_start.sh`
+
+
+## 安裝流程
 啟動 docker (包含 php-fpm nginx mysql)
 ```sh
-docker-composer up -d 
+docker-compose up -d 
 ```
 第一次啟動時會拉取 imgage 稍待片刻即可  
 啟動後下指令觀察容器啟動狀況會如附圖  
@@ -40,17 +45,21 @@ php artisan migrate
 所有的 nginx.conf 請放入 `./nginx/conf.d/`  
 容器啟動時會自動掛載資料夾進去  
 範例檔 [laravel.example](./nginx/conf.d/laravel.example)  
-[快速生成 conf 檔案](#快速生成-conf-檔案)  
-自行新增的檔案也一樣放在上述資料夾中  
+~~[快速生成 conf 檔案](#快速生成-conf-檔案)~~  
+~~自行新增的檔案也一樣放在上述資料夾中~~  
 
 nip.io 是免費的 DNS 服務可以讓你不需要再 /etc/hosts 填入 domain  
 mkcert 是快速的 localhost 憑證建立服務  
 ```sh
 brew install mkcert
+mkcert "*.accuhit.localhost"
+mkcert "*.php8.accuhit.localhost"
+mkcert "*.php81.accuhit.localhost"
 mkcert "*.127.0.0.1.nip.io"
 mkcert "*.php8.127.0.0.1.nip.io"
 mkcert "*.php81.127.0.0.1.nip.io"
 mkcert -install
+mv _wildcard.* ./nginx/ssl
 ```
 執行結束後會有六個憑證請放入 ./nginx/ssl
 ```
@@ -66,6 +75,25 @@ _wildcard.php81.127.0.0.1.nip.io.pem
 ```url
 chrome://restart
 ```
+
+### dns 服務
+```
+brew install dnsmasq
+sed -i '' s/#port=5353/port=53/g $(brew --prefix)/etc/dnsmasq.conf
+# cp ./dnsmasq/dnsmasq.conf $(brew --prefix)/etc/dnsmasq.conf
+cp ./dnsmasq/accuhit.local $(brew --prefix)/etc/dnsmasq.d/
+sudo brew services restart dnsmasq
+```
+上述環境設定好之後可以直接使用  
+- `<projectName>.accuhit.localhost`  
+- `<projectName>.127.0.0.1.nip.io`  
+- `<projectName>.php8.127.0.0.1.nip.io`  
+- `<projectName>.php81.127.0.0.1.nip.io`  
+
+環境確認  
+- `/projectName`  
+可以確認目前使用的環境與專案  
+
 
 ## 專案  
 所有專案統一放在 `./php`  
