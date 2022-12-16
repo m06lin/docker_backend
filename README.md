@@ -6,6 +6,7 @@
 |------------|-------------------------------------| ------ |
 | 2022-11-11 | 更新 nginx config 通用版本            | 開發完成 |
 | 2022-11-14 | 新增 dnsmasq                        | 開發完成 |
+| 2022-12-16 | 新增 wsl-warp                         | 開發完成 |
 
 
 ## 快速安裝
@@ -129,6 +130,16 @@ cd nginx
 ./add_host.sh <folderName>
 ## php80
 ./add_host.sh <folderName> php8-fpm
+```
+
+## wsl for warp 
+[github](https://github.com/sakai135/wsl-vpnkit)
+```PowerShell
+## PowerShell
+wget https://github.com/sakai135/wsl-vpnkit/releases/download/v0.3.8/wsl-vpnkit.tar.gz
+wsl --import wsl-vpnkit --version 2 $env:USERPROFILE\wsl-vpnkit wsl-vpnkit.tar.gz
+wsl -d wsl-vpnkit
+wsl.exe -d wsl-vpnkit --cd /app service wsl-vpnkit start
 ```
 
 ## 開發規範 
