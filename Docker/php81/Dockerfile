@@ -13,5 +13,13 @@ RUN apk update \
 RUN chmod +x /usr/local/bin/install-php-extensions
 RUN install-php-extensions mysqli pdo pdo_mysql gd zip sockets && docker-php-ext-enable pdo_mysql gd sockets
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+RUN curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar && \
+    mv phpcs.phar /usr/local/bin/phpcs && \
+    chmod +x /usr/local/bin/phpcs
+
+RUN curl -OL https://phar.phpunit.de/phpunit.phar && \
+    mv phpunit.phar /usr/local/bin/phpunit && \
+    chmod +x /usr/local/bin/phpunit
+
 
 EXPOSE 80
